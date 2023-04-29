@@ -12,10 +12,14 @@ public class characterController : MonoBehaviour
 
     private bool mirandoderecha = true;
 
+    private BoxCollider2D boxCollider;
+
+    public LayerMask capaSuelo;
 
     void Start()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
     }
 
     void Update()
@@ -33,9 +37,15 @@ public class characterController : MonoBehaviour
        gestionarOrientacion(InputMovimiento);
     }
 
+    bool EstaEnSuelo()
+    {
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.size.x, boxCollider.bounds.size.y), 0f, Vector2.down, 0.2f, capaSuelo);
+        return raycastHit.collider != null;
+    } 
+
     void procesarSalto()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && EstaEnSuelo())
         {
             Rigidbody.AddForce(Vector2.up * fuerzaSalto, ForceMode2D.Impulse);
         }
