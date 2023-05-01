@@ -16,10 +16,13 @@ public class characterController : MonoBehaviour
 
     public LayerMask capaSuelo;
 
+    private Animator animator;
+
     void Start()
     {
         Rigidbody = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -31,10 +34,20 @@ public class characterController : MonoBehaviour
     void procesarMovimiento()
     {
         float InputMovimiento = Input.GetAxis("Horizontal");
-       
+
+       if (InputMovimiento != 0f)
+        {
+            animator.SetBool("IsRunning", true);
+        }
+       else
+        {
+            animator.SetBool("IsRunning", false);
+        }
+
        Rigidbody.velocity = new Vector2 (InputMovimiento * velocidad, Rigidbody.velocity.y);
 
        gestionarOrientacion(InputMovimiento);
+        
     }
 
     bool EstaEnSuelo()
